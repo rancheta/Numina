@@ -58989,7 +58989,7 @@ var moment = require('moment');
 
 module.exports = {
 	loadCountData: function loadCountData(callback) {
-		var countUrl = "https://api.numina.co/a/counts";
+		var countUrl = "/heartbeat";
 		request.get(countUrl).set('Accept', 'application/json').end(function (err, res) {
 			if (err) {
 				callback(true, "Could Not Load Data");return;
@@ -59265,8 +59265,11 @@ var Dashboard = React.createClass({
     var self = this;
     if (this.state.isRendering) return;
     actions.loadCountData(function (err, countData) {
+      if (err) {
+        console.log(err);return;
+      };
       var sortDataByDate = actions.sortDataByDate(countData.body.result);
-      var updatedCountState = update(self.state, { $merge: { counts: sortDataByDate } });
+      var updatedCountState = update(self.state, { $merge: { counts: sortDataByDate, meta: countData.body.meta || this.state.meta } });
       self.replaceState(updatedCountState);
     });
   },
