@@ -1,6 +1,7 @@
 var React 			= require('react')
 var ReactDomServer 	= require('react-dom/server')
 var request 		= require('superagent')
+var actions 		= require('../reactClient/actions')
 
 module.exports = function(app) {
 
@@ -14,7 +15,8 @@ module.exports = function(app) {
 			.set('Accept', 'application/json')
 			.end(function(err, countsRes){
 				var reactHtml = ReactDomServer
-								.renderToString(Dashboard({ counts: countsRes.body.result, meta: countsRes.body.meta}));
+								.renderToString(Dashboard({ counts: actions.sortDataByDate(countsRes.body.result), 
+															meta: countsRes.body.meta}));
 	    		res.render('index.handlebars', {reactOutput: reactHtml, appFile: 'dashboard'});
 		});
 	});
