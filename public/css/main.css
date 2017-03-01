@@ -31,6 +31,11 @@ main {
     min-height: 250px;
 }
 
+.hire-me {
+    cursor: pointer;
+    color: #FFC0F1;
+}
+
 /*Utils*/
 .noSelect {
         user-select: none;

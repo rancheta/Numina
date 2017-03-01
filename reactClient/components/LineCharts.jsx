@@ -11,6 +11,13 @@ var exEnv = require('exenv')
 var moment = require('moment')
 var actions = require('../actions/index.js')
 
+var heartSettings = function(isPlainView) {
+	return {
+		domain : isPlainView ? null : [ 0, 15],
+		animLnth : isPlainView ? 1500 : 2000
+	}
+}
+
 var NoDataFiller = React.createClass({
 	render: function(){
 		return (
@@ -36,10 +43,10 @@ var NuLine = React.createClass({
 							syncId={this.props.syncId || null}
 							data={this.props.data}>
 							<XAxis dataKey="time" interval={20} />
-							<YAxis />
+							<YAxis domain={heartSettings(this.props.isPlainView).domain} />
 							<Tooltip />
 							<CartesianGrid stroke="#f5f5f5" />
-							<Line type="monotone" dataKey={this.props.dataKey} stroke={this.props.stroke} dot={false} />
+							<Line animationDuration={heartSettings(this.props.isPlainView).animLnth} type="monotone" dataKey={this.props.dataKey} stroke={this.props.stroke} dot={false} />
 							<Legend />
 						</LineChart>
 					</ResponsiveContainer>
@@ -64,11 +71,11 @@ var NuCombinedLine = React.createClass({
 							syncId={this.props.syncId || null}
 							data={this.props.data}>
 							<XAxis dataKey="time" interval={10} />
-							<YAxis />
+							<YAxis domain={heartSettings(this.props.isPlainView).domain} />
 							<Tooltip />
 							<CartesianGrid stroke="#f5f5f5" />
-							<Line type="monotone" dataKey="pedestrian" stroke="#4DB9E0" dot={false} />
-							<Line type="monotone" dataKey="bicyclists" stroke="#49C983" dot={false} />
+							<Line animationDuration={heartSettings(this.props.isPlainView).animLnth + 100} type="monotone" dataKey="pedestrian" stroke={ this.props.isPlainView ? "#4DB9E0" : "#ea3788"} dot={false} />
+							<Line animationDuration={heartSettings(this.props.isPlainView).animLnth} type="monotone" dataKey="bicyclists" stroke={ this.props.isPlainView ? "#49C983" : "#ea3788"} dot={false} />
 							<Legend />
 						</LineChart>
 					</ResponsiveContainer>
