@@ -59,9 +59,7 @@ var Dashboard = React.createClass({
     return (
       <main>
 
-        <Header state={this.state} 
-                toggleSync={() => this.toggleNumina() } 
-                isPlainView={this.state.isPlainView} />
+        <Header isPlainView={this.state.isPlainView} />
 
         <div className="container">
           <div className="row main">
