@@ -11,7 +11,7 @@ var Header = React.createClass({
 			<div className="row nav">
 				<div className="container">
 					<div className="col-xs-12 col-md-8 center">
-						<h3>Numina Exercise</h3>
+						<h3>Numina Heartbeats</h3>
 					</div>
 					<div className="col-xs-12 col-md-4 center">
 						<button className="btn button btn-default" onClick={() => this.props.toggleSync()}>

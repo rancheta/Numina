@@ -59061,7 +59061,7 @@ var Header = React.createClass({
 					React.createElement(
 						"h3",
 						null,
-						"Numina Exercise"
+						"Numina Heartbeats"
 					)
 				),
 				React.createElement(
