@@ -14,18 +14,22 @@ var Dashboard = React.createClass({
   // simply invoking this.setState/replaceState using the update addon
   getInitialState : function() {
     return {
-      counts: [],
-      meta: {},
-      isRendering: false
+      counts: this.props.counts || [],
+      meta: this.props.meta || {},
+      isRendering: false,
+      autoSync: true,
+      syncId: null
     }
   },
 
-  shouldComponentUpdate : function (nextProps, nextState) {
-    if (this.state.counts !== nextState.counts) {
-      return true
-    } else {
-      return false
-    }
+  componentDidMount: function() {
+    var self = this
+    var syncId = setInterval(function(){
+      if (self.state.autoSync) {
+        self.getCountData()
+      };
+    }, 10000);
+    this.setState({syncId: syncId});
   },
 
   // Instead of using an action/reducer or dispatcher implementation I kinda like
@@ -33,12 +37,9 @@ var Dashboard = React.createClass({
   getCountData : function() {
     var self = this
     if (this.state.isRendering) return;
-    this.setState({ isRendering : true })
-    console.log('isrendering')
     actions.loadCountData(function(err, countData) {
       var sortDataByDate = actions.sortDataByDate(countData.body.result)
-      var updatedCountState = update(self.state, {$merge: { counts: sortDataByDate, isRendering: false } });
-      console.log('finished')
+      var updatedCountState = update(self.state, {$merge: { counts: sortDataByDate } });
       self.replaceState(updatedCountState)
     })
   },
@@ -48,28 +49,45 @@ var Dashboard = React.createClass({
     return (
       <main>
 
-        <Header state={this.state} />
+        <Header state={this.state} 
+                toggleSync={() => this.setState({ autoSync: !this.state.autoSync })} 
+                autoSync={this.state.autoSync} />
 
         <div className="container">
           <div className="row main">
-            <h1>Dashboard</h1>
-            <p style={this.state.isRendering ? {} : {display:'none'}}> Rendering </p>
             <div className="col-sm-12 col">
-              <CombinedChart syncId={0} data={allDataD3}  />                  
+              <CombinedChart  title="# of bicyclists and pedestrians by minute"
+                              meta={this.state.meta}
+                              syncId="CountsBaby" 
+                              data={allDataD3}  />                  
             </div>
-            <div className="col-md-6 col">
-              <LineChart syncId={0} dataKey="pedestrian" data={allDataD3}  />                  
+            <div className="col-md-6 col-sm-12 col">
+              <LineChart      title="# of pedestrians by minute"
+                              meta={this.state.meta}
+                              syncId="CountsBaby" 
+                              stroke="#4DB9E0" 
+                              dataKey="pedestrian" 
+                              data={allDataD3}  />                  
             </div>
-            <div className="col-md-6 col">
-              <LineChart syncId={0} dataKey="bicyclists" data={allDataD3}  />                  
+            <div className="col-md-6 col-sm-12 col">
+              <LineChart      title="# of bicyclists by minute"
+                              meta={this.state.meta}
+                              syncId="CountsBaby" 
+                              stroke="#49C983" 
+                              dataKey="bicyclists" 
+                              data={allDataD3}  />                  
             </div>
             <div className="col-sm-12 col">
-              <LineChart syncId={0} dataKey="total" data={allDataD3}  />                  
+              <LineChart      title="Total # of pedestrians and bicyclists"
+                              meta={this.state.meta}
+                              syncId="CountsBaby" 
+                              stroke="#222222" 
+                              dataKey="total" 
+                              data={allDataD3}  />                  
             </div>
-            <button onClick={() => this.getCountData()}>update</button>
           </div>
+          <p style={{ color: '#FFF' }}> Please hire me</p>
         </div>
-
       </main>
     )
   }

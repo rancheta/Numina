@@ -59042,12 +59042,13 @@ var Header = React.createClass({
 	displayName: "Header",
 
 
-	shouldComponentUpdate: function shouldComponentUpdate() {
-		// Can be rendered on init page but keeping for future implementations
-		return false;
+	shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+		return this.props.autoSync != nextProps.autoSync ? true : false;
 	},
 
 	render: function render() {
+		var _this = this;
+
 		return React.createElement(
 			"div",
 			{ className: "row nav" },
@@ -59056,11 +59057,24 @@ var Header = React.createClass({
 				{ className: "container" },
 				React.createElement(
 					"div",
-					{ className: "col-xs-12 col-md-8" },
+					{ className: "col-xs-12 col-md-8 center" },
 					React.createElement(
-						"h5",
+						"h3",
 						null,
-						"Numina"
+						"Numina Exercise"
+					)
+				),
+				React.createElement(
+					"div",
+					{ className: "col-xs-12 col-md-4 center" },
+					React.createElement(
+						"button",
+						{ className: "btn button btn-default", onClick: function onClick() {
+								return _this.props.toggleSync();
+							} },
+						"Turn ",
+						this.props.autoSync ? "Off" : "On",
+						" Auto Sync"
 					)
 				)
 			)
@@ -59083,6 +59097,7 @@ var ResponsiveContainer = require('recharts').ResponsiveContainer;
 var Legend = require('recharts').Legend;
 var Line = require('recharts').Line;
 var exEnv = require('exenv');
+var moment = require('moment');
 var actions = require('../actions/index.js');
 
 var NoDataFiller = React.createClass({
@@ -59090,9 +59105,15 @@ var NoDataFiller = React.createClass({
 
 	render: function render() {
 		return React.createElement(
-			'h5',
-			null,
-			'No Data'
+			'div',
+			{ className: 'chart-container text-center' },
+			React.createElement('br', null),
+			React.createElement(
+				'h3',
+				null,
+				'Loading Data...'
+			),
+			React.createElement('br', null)
 		);
 	}
 });
@@ -59102,23 +59123,35 @@ var NuLine = React.createClass({
 
 
 	render: function render() {
-		if (this.props.data && this.props.data.length > 0) {
+		if (this.props.data && this.props.data.length > 0 && exEnv.canUseDOM) {
 			return React.createElement(
-				ResponsiveContainer,
-				{ width: '100%', height: 250 },
+				'div',
+				{ className: 'chart-container text-center' },
 				React.createElement(
-					LineChart,
-					{
-						sycnId: this.props.sycnId || null,
-						data: this.props.data,
-						width: 2000, height: 250,
-						margin: { top: 5, right: 20, left: 10, bottom: 5 } },
-					React.createElement(XAxis, { dataKey: 'time', interval: 20 }),
-					React.createElement(YAxis, null),
-					React.createElement(Tooltip, null),
-					React.createElement(CartesianGrid, { stroke: '#f5f5f5' }),
-					React.createElement(Line, { type: 'monotone', dataKey: this.props.dataKey, stroke: '#ff7300' }),
-					React.createElement(Legend, null)
+					'h4',
+					null,
+					this.props.title
+				),
+				React.createElement(
+					'p',
+					null,
+					"from " + moment(this.props.meta.start).format("MMM DD HH:mm a") + " to " + moment(this.props.meta.end).format("MMM DD HH:mm a")
+				),
+				React.createElement(
+					ResponsiveContainer,
+					{ width: '100%', height: 250, className: 'chart-container' },
+					React.createElement(
+						LineChart,
+						{
+							syncId: this.props.syncId || null,
+							data: this.props.data },
+						React.createElement(XAxis, { dataKey: 'time', interval: 20 }),
+						React.createElement(YAxis, null),
+						React.createElement(Tooltip, null),
+						React.createElement(CartesianGrid, { stroke: '#f5f5f5' }),
+						React.createElement(Line, { type: 'monotone', dataKey: this.props.dataKey, stroke: this.props.stroke, dot: false }),
+						React.createElement(Legend, null)
+					)
 				)
 			);
 		} else {
@@ -59132,23 +59165,36 @@ var NuCombinedLine = React.createClass({
 
 
 	render: function render() {
-		if (this.props.data && this.props.data.length > 0) {
+		if (this.props.data && this.props.data.length > 0 && exEnv.canUseDOM) {
 			return React.createElement(
-				ResponsiveContainer,
-				{ width: '100%', height: 300 },
+				'div',
+				{ className: 'chart-container text-center' },
 				React.createElement(
-					LineChart,
-					{
-						sycnId: this.props.sycnId || null,
-						data: this.props.data,
-						margin: { top: 5, right: 20, left: 10, bottom: 5 } },
-					React.createElement(XAxis, { dataKey: 'time', interval: 10 }),
-					React.createElement(YAxis, null),
-					React.createElement(Tooltip, null),
-					React.createElement(CartesianGrid, { stroke: '#f5f5f5' }),
-					React.createElement(Line, { type: 'monotone', dataKey: 'pedestrian', stroke: '#ff7300' }),
-					React.createElement(Line, { type: 'monotone', dataKey: 'bicyclists', stroke: '#565656' }),
-					React.createElement(Legend, null)
+					'h4',
+					null,
+					this.props.title
+				),
+				React.createElement(
+					'p',
+					null,
+					"from " + moment(this.props.meta.start).format("MMM DD HH:mm a") + " to " + moment(this.props.meta.end).format("MMM DD HH:mm a")
+				),
+				React.createElement(
+					ResponsiveContainer,
+					{ width: '100%', height: 270, className: 'chart-container' },
+					React.createElement(
+						LineChart,
+						{
+							syncId: this.props.syncId || null,
+							data: this.props.data },
+						React.createElement(XAxis, { dataKey: 'time', interval: 10 }),
+						React.createElement(YAxis, null),
+						React.createElement(Tooltip, null),
+						React.createElement(CartesianGrid, { stroke: '#f5f5f5' }),
+						React.createElement(Line, { type: 'monotone', dataKey: 'pedestrian', stroke: '#4DB9E0', dot: false }),
+						React.createElement(Line, { type: 'monotone', dataKey: 'bicyclists', stroke: '#49C983', dot: false }),
+						React.createElement(Legend, null)
+					)
 				)
 			);
 		} else {
@@ -59162,7 +59208,7 @@ module.exports = {
 	CombinedLine: NuCombinedLine
 };
 
-},{"../actions/index.js":503,"exenv":3,"react":191,"recharts":226}],506:[function(require,module,exports){
+},{"../actions/index.js":503,"exenv":3,"moment":4,"react":191,"recharts":226}],506:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -59170,8 +59216,9 @@ var ReactDOM = require('react-dom');
 var Dashboard = require('./pages/Dashboard.jsx');
 
 var mountNode = document.getElementById('app');
+var serverProps = JSON.parse(document.getElementById('serverProps').innerHTML);
 
-ReactDOM.render(React.createElement(Dashboard, null), mountNode);
+ReactDOM.render(React.createElement(Dashboard, { counts: serverProps.counts, meta: serverProps.meta }), mountNode);
 
 },{"./pages/Dashboard.jsx":507,"react":191,"react-dom":7}],507:[function(require,module,exports){
 'use strict';
@@ -59194,18 +59241,22 @@ var Dashboard = React.createClass({
   // simply invoking this.setState/replaceState using the update addon
   getInitialState: function getInitialState() {
     return {
-      counts: [],
-      meta: {},
-      isRendering: false
+      counts: this.props.counts || [],
+      meta: this.props.meta || {},
+      isRendering: false,
+      autoSync: true,
+      syncId: null
     };
   },
 
-  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.counts !== nextState.counts) {
-      return true;
-    } else {
-      return false;
-    }
+  componentDidMount: function componentDidMount() {
+    var self = this;
+    var syncId = setInterval(function () {
+      if (self.state.autoSync) {
+        self.getCountData();
+      };
+    }, 10000);
+    this.setState({ syncId: syncId });
   },
 
   // Instead of using an action/reducer or dispatcher implementation I kinda like
@@ -59213,12 +59264,9 @@ var Dashboard = React.createClass({
   getCountData: function getCountData() {
     var self = this;
     if (this.state.isRendering) return;
-    this.setState({ isRendering: true });
-    console.log('isrendering');
     actions.loadCountData(function (err, countData) {
       var sortDataByDate = actions.sortDataByDate(countData.body.result);
-      var updatedCountState = update(self.state, { $merge: { counts: sortDataByDate, isRendering: false } });
-      console.log('finished');
+      var updatedCountState = update(self.state, { $merge: { counts: sortDataByDate } });
       self.replaceState(updatedCountState);
     });
   },
@@ -59230,7 +59278,11 @@ var Dashboard = React.createClass({
     return React.createElement(
       'main',
       null,
-      React.createElement(Header, { state: this.state }),
+      React.createElement(Header, { state: this.state,
+        toggleSync: function toggleSync() {
+          return _this.setState({ autoSync: !_this.state.autoSync });
+        },
+        autoSync: this.state.autoSync }),
       React.createElement(
         'div',
         { className: 'container' },
@@ -59238,42 +59290,48 @@ var Dashboard = React.createClass({
           'div',
           { className: 'row main' },
           React.createElement(
-            'h1',
-            null,
-            'Dashboard'
+            'div',
+            { className: 'col-sm-12 col' },
+            React.createElement(CombinedChart, { title: '# of bicyclists and pedestrians by minute',
+              meta: this.state.meta,
+              syncId: 'CountsBaby',
+              data: allDataD3 })
           ),
           React.createElement(
-            'p',
-            { style: this.state.isRendering ? {} : { display: 'none' } },
-            ' Rendering '
+            'div',
+            { className: 'col-md-6 col-sm-12 col' },
+            React.createElement(LineChart, { title: '# of pedestrians by minute',
+              meta: this.state.meta,
+              syncId: 'CountsBaby',
+              stroke: '#4DB9E0',
+              dataKey: 'pedestrian',
+              data: allDataD3 })
+          ),
+          React.createElement(
+            'div',
+            { className: 'col-md-6 col-sm-12 col' },
+            React.createElement(LineChart, { title: '# of bicyclists by minute',
+              meta: this.state.meta,
+              syncId: 'CountsBaby',
+              stroke: '#49C983',
+              dataKey: 'bicyclists',
+              data: allDataD3 })
           ),
           React.createElement(
             'div',
             { className: 'col-sm-12 col' },
-            React.createElement(CombinedChart, { syncId: 0, data: allDataD3 })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-md-6 col' },
-            React.createElement(LineChart, { syncId: 0, dataKey: 'pedestrian', data: allDataD3 })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-md-6 col' },
-            React.createElement(LineChart, { syncId: 0, dataKey: 'bicyclists', data: allDataD3 })
-          ),
-          React.createElement(
-            'div',
-            { className: 'col-sm-12 col' },
-            React.createElement(LineChart, { syncId: 0, dataKey: 'total', data: allDataD3 })
-          ),
-          React.createElement(
-            'button',
-            { onClick: function onClick() {
-                return _this.getCountData();
-              } },
-            'update'
+            React.createElement(LineChart, { title: 'Total # of pedestrians and bicyclists',
+              meta: this.state.meta,
+              syncId: 'CountsBaby',
+              stroke: '#222222',
+              dataKey: 'total',
+              data: allDataD3 })
           )
+        ),
+        React.createElement(
+          'p',
+          { style: { color: '#FFF' } },
+          ' Please hire me'
         )
       )
     );

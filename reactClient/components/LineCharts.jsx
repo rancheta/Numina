@@ -8,12 +8,17 @@ var ResponsiveContainer = require('recharts').ResponsiveContainer
 var Legend = require('recharts').Legend
 var Line = require('recharts').Line
 var exEnv = require('exenv')
+var moment = require('moment')
 var actions = require('../actions/index.js')
 
 var NoDataFiller = React.createClass({
 	render: function(){
 		return (
-			<h5>No Data</h5>
+			<div className="chart-container text-center">
+				<br  />
+				<h3>Loading Data...</h3>
+				<br  />
+			</div>
 		)
 	}
 })
@@ -21,22 +26,24 @@ var NoDataFiller = React.createClass({
 var NuLine = React.createClass({
 
 	render: function() {
-		if (this.props.data && this.props.data.length > 0){
+		if (this.props.data && this.props.data.length > 0 && exEnv.canUseDOM){
 			return (
-				<ResponsiveContainer width="100%" height={250}>
-					<LineChart
-						sycnId={this.props.sycnId || null}
-						data={this.props.data}
-						width={2000} height={250}
-						margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-						<XAxis dataKey="time" interval={20} />
-						<YAxis />
-						<Tooltip />
-						<CartesianGrid stroke="#f5f5f5" />
-						<Line type="monotone" dataKey={this.props.dataKey} stroke="#ff7300" />
-						<Legend />
-					</LineChart>
-				</ResponsiveContainer>
+				<div className="chart-container text-center">
+					<h4>{this.props.title}</h4>
+					<p>{"from " + moment(this.props.meta.start).format("MMM DD HH:mm a") + " to " + moment(this.props.meta.end).format("MMM DD HH:mm a")}</p>
+					<ResponsiveContainer width="100%" height={250} className="chart-container">
+						<LineChart
+							syncId={this.props.syncId || null}
+							data={this.props.data}>
+							<XAxis dataKey="time" interval={20} />
+							<YAxis />
+							<Tooltip />
+							<CartesianGrid stroke="#f5f5f5" />
+							<Line type="monotone" dataKey={this.props.dataKey} stroke={this.props.stroke} dot={false} />
+							<Legend />
+						</LineChart>
+					</ResponsiveContainer>
+				</div>
 			)
 		} else {
 			return <NoDataFiller  />
@@ -47,22 +54,25 @@ var NuLine = React.createClass({
 var NuCombinedLine = React.createClass({
 
 	render: function() {
-		if (this.props.data && this.props.data.length > 0){
+		if (this.props.data && this.props.data.length > 0  && exEnv.canUseDOM){
 			return (
-				<ResponsiveContainer width="100%" height={300}>
-					<LineChart
-						sycnId={this.props.sycnId || null}
-						data={this.props.data}
-						margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-						<XAxis dataKey="time" interval={10} />
-						<YAxis />
-						<Tooltip />
-						<CartesianGrid stroke="#f5f5f5" />
-						<Line type="monotone" dataKey="pedestrian" stroke="#ff7300" />
-						<Line type="monotone" dataKey="bicyclists" stroke="#565656" />
-						<Legend />
-					</LineChart>
-				</ResponsiveContainer>
+				<div className="chart-container text-center">
+					<h4>{this.props.title}</h4>
+					<p>{"from " + moment(this.props.meta.start).format("MMM DD HH:mm a") + " to " + moment(this.props.meta.end).format("MMM DD HH:mm a")}</p>
+					<ResponsiveContainer width="100%" height={270} className="chart-container">
+						<LineChart
+							syncId={this.props.syncId || null}
+							data={this.props.data}>
+							<XAxis dataKey="time" interval={10} />
+							<YAxis />
+							<Tooltip />
+							<CartesianGrid stroke="#f5f5f5" />
+							<Line type="monotone" dataKey="pedestrian" stroke="#4DB9E0" dot={false} />
+							<Line type="monotone" dataKey="bicyclists" stroke="#49C983" dot={false} />
+							<Legend />
+						</LineChart>
+					</ResponsiveContainer>
+				</div>
 			)
 		} else {
 			return <NoDataFiller  />

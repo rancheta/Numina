@@ -25,5 +25,9 @@ gulp.task( 'server:restart', ['scripts'], function() {
 });
 
 gulp.task( 'default', [ 'server:start' ], function() {
-    gulp.watch( ['./reactClient/**/**/**/*.jsx', './reactClient/**/**/**/*.js', 'views/**/*.handlebars' ], [ 'server:restart' ] )
+    gulp.watch([   './reactClient/**/**/**/*.jsx', 
+                    './reactClient/**/**/**/*.js',  
+                    './routes/*.js', 
+                    'views/**/*.handlebars' ], 
+                [ 'server:restart' ] )
 });
