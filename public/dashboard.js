@@ -59324,11 +59324,7 @@ var Dashboard = React.createClass({
     return React.createElement(
       'main',
       null,
-      React.createElement(Header, { state: this.state,
-        toggleSync: function toggleSync() {
-          return _this.toggleNumina();
-        },
-        isPlainView: this.state.isPlainView }),
+      React.createElement(Header, { isPlainView: this.state.isPlainView }),
       React.createElement(
         'div',
         { className: 'container' },
