@@ -59061,7 +59061,7 @@ var Header = React.createClass({
 					React.createElement(
 						"h3",
 						null,
-						"Numina Exercise"
+						"Numina Heartbeats"
 					)
 				),
 				React.createElement(
@@ -59255,7 +59255,7 @@ var Dashboard = React.createClass({
       if (self.state.autoSync) {
         self.getCountData();
       };
-    }, 10000);
+    }, 7000);
     this.setState({ syncId: syncId });
   },
 

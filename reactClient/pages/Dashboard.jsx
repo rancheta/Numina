@@ -28,7 +28,7 @@ var Dashboard = React.createClass({
       if (self.state.autoSync) {
         self.getCountData()
       };
-    }, 10000);
+    }, 7000);
     this.setState({syncId: syncId});
   },
 
