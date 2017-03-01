@@ -87,7 +87,7 @@ var Dashboard = React.createClass({
                               data={allDataD3}  />                  
             </div>
           </div>
-          <p style={{ color: '#FFF' }}> Please hire me</p>
+          <p style={{ color: '#FFF' }}> Please hire me &#9825;</p>
         </div>
       </main>
     )
