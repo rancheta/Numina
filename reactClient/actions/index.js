@@ -3,7 +3,7 @@ var moment = require('moment')
 
 module.exports = {
 	loadCountData: function (callback) {
-		var countUrl = "https://api.numina.co/a/counts"
+		var countUrl = "/heartbeat"
 		request
 			.get(countUrl)
 			.set('Accept', 'application/json')

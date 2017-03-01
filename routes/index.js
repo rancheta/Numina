@@ -6,6 +6,19 @@ var Dashboard 		= require('../reactClient/pages/Dashboard.jsx')
 
 module.exports = function(app) {
 
+	// To get around CORS
+	app.get('/heartbeat', function(req, res){
+		var countUrl = "https://api.numina.co/a/counts"
+		request
+			.get(countUrl)
+			.set('Accept', 'application/json')
+			.end(function(err, countsRes){
+				if (err) { console.error(err); res.status(404).json(err); return; };
+				res.json(JSON.parse(countsRes.text))
+		});
+	});
+
+
 	app.get('/', function(req, res){
 		// This is here to instatiate count data on server
 		// instead of calling remote api could call directly to DB on prod server a little cleaner

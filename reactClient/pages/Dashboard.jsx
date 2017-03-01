@@ -38,8 +38,9 @@ var Dashboard = React.createClass({
     var self = this
     if (this.state.isRendering) return;
     actions.loadCountData(function(err, countData) {
+      if (err) {console.log(err); return;};
       var sortDataByDate = actions.sortDataByDate(countData.body.result)
-      var updatedCountState = update(self.state, {$merge: { counts: sortDataByDate } });
+      var updatedCountState = update(self.state, {$merge: { counts: sortDataByDate, meta: countData.body.meta || this.state.meta } });
       self.replaceState(updatedCountState)
     })
   },
@@ -86,7 +87,7 @@ var Dashboard = React.createClass({
                               data={allDataD3}  />                  
             </div>
           </div>
-          <p style={{ color: '#FFF' }}> Please hire me</p>
+          <p style={{ color: '#FFF' }}> Please hire me &#9825;</p>
         </div>
       </main>
     )
