@@ -11,3 +11,6 @@ create a <em>reducers</em> folder that I'll import into pages where it will cons
 as seperate apps instead of using routing to reduce complexity but it kinda depends on the project.
 
 <em>Views/</em> are just skeleton pages that the ReactApp get rendered into.
+
+## Building
+To build clone down the project to your comp, run npm install in it, make sure your're running Node 4.4.5 or above, install the gulp command line tool using npm install -g gulp, then just run gulp and a dev server should spin up for you on localhost:3000. Alternatively, you can also just run gulp scripts to compile the project, then run index.js (or forever index.js to keep it running indefinately).
