@@ -1,0 +1,43 @@
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+.nav {
+	background-color: #1D1D1D;
+	border-bottom: 1px solid #CCC;
+	padding: 6px;
+    color: white;
+}
+.nav button {
+	margin-left: 3px;
+}
+
+main {
+    background-color: #EFEFEF;
+}
+
+.filters {
+    padding: 12px;
+    color: white;
+}
+.filters button {
+    margin: 0 3px;
+}
+/*Utils*/
+.noSelect {
+        user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -o-user-select: none;
+} 
+
+button:focus {outline:0 !important;}
+
+.noPaddingLeft {
+    padding-left: 0px !important;
+}
+
+.noPaddingRight {
+    padding-right: 0px !important;
+}
